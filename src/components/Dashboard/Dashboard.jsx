@@ -2,7 +2,6 @@
 import Header from "../Header";
 import StatsCard from "./StatsCard";
 import { CreditCard, ChartNoAxesCombined, House, TrendingUpDown } from "lucide-react";
-import { TrendingUp, TrendingDown } from "lucide-react";
 import Transaction from "./Transaction";
 import SpendingChart from "./SpendingChart";
 import { supabase } from "../../supabase/client.js"
@@ -51,7 +50,33 @@ function Dashboard() {
         getExpenses()
     }
 
+    const chartData = expenses
+        .reduce((acc, expense) => {
+            const date = new Date(expense.created_at);
 
+            const month = date.toLocaleString("default", {
+                month: "short",
+            });
+
+            const monthNumber = date.getMonth();
+
+            const existing = acc.find(
+                (item) => item.month === month
+            );
+
+            if (existing) {
+                existing.amount += Number(expense.amount);
+            } else {
+                acc.push({
+                    month,
+                    monthNumber,
+                    amount: Number(expense.amount),
+                });
+            }
+
+            return acc;
+        }, [])
+        .sort((a, b) => a.monthNumber - b.monthNumber);
 
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -63,76 +88,94 @@ function Dashboard() {
         }
     );
 
-    const currentDate = new Date().toLocaleString(
-        "default",
-        {
-            // dateStyle:"short",
-            month: "long",
-            year: "2-digit"
-        }
-    )
-
-    const categories = [
-        {
-            name: "Food",
-            amount: 4500,
-            percent: 80,
+    const categoryConfig = {
+        Food: {
             icon: Utensils,
             bg: "bg-orange-500/20",
             color: "text-orange-500",
             barColor: "bg-orange-500",
         },
 
-        {
-            name: "Shopping",
-            amount: 3200,
-            percent: 60,
+        Shopping: {
             icon: ShoppingBag,
             bg: "bg-blue-500/20",
             color: "text-blue-500",
             barColor: "bg-blue-500",
         },
 
-        {
-            name: "Entertainment",
-            amount: 1800,
-            percent: 40,
+        Entertainment: {
             icon: Tv,
             bg: "bg-purple-500/20",
             color: "text-purple-500",
             barColor: "bg-purple-500",
         },
 
-        {
-            name: "Transportation",
-            amount: 1200,
-            percent: 25,
+        Transportation: {
             icon: Car,
             bg: "bg-yellow-500/20",
             color: "text-yellow-500",
             barColor: "bg-yellow-500",
         },
 
-        {
-            name: "Health",
-            amount: 900,
-            percent: 18,
+        Health: {
             icon: HeartPulse,
             bg: "bg-red-500/20",
             color: "text-red-500",
             barColor: "bg-red-500",
         },
 
-        {
-            name: "Utilities",
-            amount: 700,
-            percent: 12,
+        Utilities: {
             icon: Wallet,
             bg: "bg-emerald-500/20",
             color: "text-emerald-500",
             barColor: "bg-emerald-500",
         },
-    ];
+    };
+
+    const categoryTotals = expenses.reduce((acc, expense) => {
+        acc[expense.category] =
+            (acc[expense.category] || 0) +
+            Number(expense.amount);
+
+        return acc;
+    }, {});
+
+    const totalExpenseAmount = Object.values(categoryTotals)
+        .reduce((sum, amount) => sum + amount, 0);
+
+
+    const categoryData = Object.entries(categoryTotals).map(
+        ([name, amount]) => ({
+            name,
+            amount,
+            percent:
+                totalExpenseAmount > 0 ? (amount / totalExpenseAmount) * 100 : 0,
+            ...categoryConfig[name],
+        })
+    );
+    const totalExpenses = expenses.reduce(
+        (sum, expense) => sum + Number(expense.amount),
+        0
+    );
+    const currentDate = new Date();
+
+
+    const thisMonthExpenses = expenses.
+        filter((expense) => {
+            const expenseDate = new Date(expense.created_at)
+            // console.log(expenseDate);
+
+            return (
+                expenseDate.getMonth() === currentDate.getMonth() && expenseDate.getFullYear() === currentDate.getFullYear()
+
+            )
+        })
+        .reduce(
+            (sum, expense) => sum + Number(expense.amount),
+            0
+        );
+
+    const totalTransactions = expenses.length;
 
     return (
         <div className="bg-background ">
@@ -143,23 +186,21 @@ function Dashboard() {
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
                 <StatsCard
                     title="Total Expenses"
-                    amount="₹24,560"
+                    amount={`₹${totalExpenses}`}
                     change="All time"
                     icon={<CreditCard size={14} />}
                 />
 
                 <StatsCard
                     title="This Month"
-                    amount="₹373.31"
-                    trend="7.2%"
-                    trendType="up"
-                    change="June 2026"
+                    amount={`₹${thisMonthExpenses}`}
+                    change={currentMonth}
                     icon={<House size={14} />}
                 />
                 <StatsCard
                     title="Transactions"
-                    amount="128"
-                    change={`12% ${currentMonth}`}
+                    amount={totalTransactions}
+                    change={`${currentMonth}`}
                     icon={<ChartNoAxesCombined size={14} />}
                 />
 
@@ -177,12 +218,12 @@ function Dashboard() {
                     <h2 className="mb-4 font-semibold">
                         Spending Trend
                     </h2>
-                    <SpendingChart />
+                    <SpendingChart data={chartData} />
                 </div>
 
                 <div className=" rounded-2xl border border-gray-400/30 p-6 min-h-64 col-span-3">
                     <h2 className="my-2">Categories</h2>
-                    {categories.map((category) => {
+                    {categoryData.map((category) => {
                         const Icon = category.icon;
 
                         return (
@@ -228,6 +269,7 @@ function Dashboard() {
                             onDelete={deleteExpense}
                             onEdit={setEditingExpense}
                             expense={expense}
+                            date={currentDate}
                         />
                     ))}
                 </div>
