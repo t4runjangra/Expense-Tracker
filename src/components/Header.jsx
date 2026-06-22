@@ -3,9 +3,9 @@ import { Moon, Sun, X } from "lucide-react";
 import useTheme from '../context/Theme';
 import AddExpenseModal from './Dashboard/AddExpenseModal';
 
-const Header = () => {
+const Header = ({ onOpenModal }) => {
     const { themeMode, darkTheme, lightTheme } = useTheme()
-    const [isModalOpen, setIsModalOpen] = useState(false);
+
     function handleClick() {
         if (themeMode === "light") {
             darkTheme();
@@ -20,6 +20,7 @@ const Header = () => {
             year: "numeric",
         }
     );
+
     return (
         <>
             <header className="flex items-center justify-between mb-8 py-2 border-b border-gray-400/30">
@@ -47,17 +48,12 @@ const Header = () => {
                     </button>
 
                     <button
-                        onClick={() => setIsModalOpen(true)}
+                        onClick={onOpenModal}
                         className="bg-violet-600 px-4 py-2 rounded-xl w-40 text-white mr-4 ">
                         + Add Expense
                     </button>
                 </div>
             </header>
-            {isModalOpen && (
-                <AddExpenseModal
-                    onClose={() => setIsModalOpen(false)}
-                />
-            )}
         </>
     )
 }

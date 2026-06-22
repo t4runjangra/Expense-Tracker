@@ -4,7 +4,8 @@ import StatsCard from "./StatsCard";
 import { CreditCard, ChartNoAxesCombined, House, TrendingUpDown } from "lucide-react";
 import { TrendingUp, TrendingDown } from "lucide-react";
 import Transaction from "./Transaction";
-import expenses from "../../data/Expense.json"
+import SpendingChart from "./SpendingChart";
+import { supabase } from "../../supabase/client.js"
 import {
     Tv,
     ShoppingBag,
@@ -13,8 +14,47 @@ import {
     HeartPulse,
     Wallet,
 } from "lucide-react";
+import { useEffect, useState } from "react";
+import AddExpenseModal from "./AddExpenseModal";
 
 function Dashboard() {
+    const [expenses, setExpenses] = useState([]);
+    const [editingExpense, setEditingExpense] = useState(null);
+    async function getExpenses() {
+        const { data, error } = await supabase
+            .from("expense")
+            .select("*")
+            .order("created_at", {
+                ascending: false
+            })
+        if (!error) {
+            setExpenses(data)
+        }
+    }
+
+
+    useEffect(() => {
+        getExpenses();
+    }, [])
+
+    async function deleteExpense(id) {
+        const { error } = await supabase
+            .from("expense")
+            .delete()
+            .eq("id", id)
+
+
+        if (error) {
+            console.log(error);
+            return
+        }
+        getExpenses()
+    }
+
+
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
     const currentMonth = new Date().toLocaleString(
         "default",
         {
@@ -22,6 +62,16 @@ function Dashboard() {
             year: "numeric",
         }
     );
+
+    const currentDate = new Date().toLocaleString(
+        "default",
+        {
+            // dateStyle:"short",
+            month: "long",
+            year: "2-digit"
+        }
+    )
+
     const categories = [
         {
             name: "Food",
@@ -83,9 +133,12 @@ function Dashboard() {
             barColor: "bg-emerald-500",
         },
     ];
+
     return (
         <div className="bg-background ">
-            <Header />
+            <Header
+                onOpenModal={() => setIsModalOpen(true)}
+            />
 
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
                 <StatsCard
@@ -121,7 +174,10 @@ function Dashboard() {
             </div>
             <div className="grid grid-cols-7 gap-4 mt-6  border-gray-400/30">
                 <div className=" col-span-4 rounded-2xl border p-6 border-gray-400/30 ">
-                    Spending Trend
+                    <h2 className="mb-4 font-semibold">
+                        Spending Trend
+                    </h2>
+                    <SpendingChart />
                 </div>
 
                 <div className=" rounded-2xl border border-gray-400/30 p-6 min-h-64 col-span-3">
@@ -165,13 +221,32 @@ function Dashboard() {
                     {expenses.map((expense) => (
                         <Transaction
                             key={expense.id}
+                            id={expense.id}
                             title={expense.title}
                             amount={expense.amount}
                             category={expense.category}
+                            onDelete={deleteExpense}
+                            onEdit={setEditingExpense}
+                            expense={expense}
                         />
                     ))}
                 </div>
             </div>
+            {isModalOpen && (
+                <AddExpenseModal
+                    onClose={() => setIsModalOpen(false)}
+                    getExpenses={getExpenses}
+                />
+            )}
+            {
+                editingExpense && (
+                    <AddExpenseModal
+                        expense={editingExpense}
+                        onClose={() => setEditingExpense(null)}
+                        getExpenses={getExpenses}
+                    />
+                )
+            }
         </div>
     );
 }

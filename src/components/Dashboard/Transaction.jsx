@@ -1,5 +1,7 @@
 import React from 'react'
 import {
+    Pencil,
+    Trash,
     Tv,
     ShoppingBag,
     Car,
@@ -7,7 +9,7 @@ import {
     HeartPulse,
     Wallet,
 } from "lucide-react";
-function Transaction({ title, amount, category }) {
+function Transaction({ id, title, amount, category, onDelete, onEdit , expense }) {
     const categoryConfig = {
         Entertainment: {
             icon: Tv,
@@ -70,10 +72,24 @@ function Transaction({ title, amount, category }) {
                         </p>
                     </div>
                 </div>
+                <div className="flex items-center gap-4">
+                    <p className="font-semibold">
+                        ₹{amount}
+                    </p>
 
-                <p className="font-semibold">
-                    ₹{amount}
-                </p>
+                    <button
+                        onClick={() => onDelete(id)}
+                        className="text-red-500 hover:text-red-600 transition"
+                    >
+                        <Trash size={16} />
+                    </button>
+                    <button
+                        onClick={() => onEdit(expense)}
+                        className="text-blue-500 hover:text-blue-600 transition"
+                    >
+                        <Pencil size={16} />
+                    </button>
+                </div>
             </div>
         </>
     )
