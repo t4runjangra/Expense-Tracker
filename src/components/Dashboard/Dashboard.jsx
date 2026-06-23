@@ -1,7 +1,7 @@
 
 import Header from "../Header";
 import StatsCard from "./StatsCard";
-import { CreditCard, ChartNoAxesCombined, House, TrendingUpDown } from "lucide-react";
+import { CreditCard, ChartBar, House, TrendingUpDown } from "lucide-react";
 import Transaction from "./Transaction";
 import SpendingChart from "./SpendingChart";
 import { supabase } from "../../supabase/client.js"
@@ -201,7 +201,7 @@ function Dashboard() {
                     title="Transactions"
                     amount={totalTransactions}
                     change={`${currentMonth}`}
-                    icon={<ChartNoAxesCombined size={14} />}
+                    icon={<ChartBar size={14} />}
                 />
 
                 <StatsCard

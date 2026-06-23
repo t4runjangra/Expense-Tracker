@@ -10,12 +10,11 @@ import {
 
 function SpendingChart({ data }) {
     const chartData = data
-    console.log(data);
-    
+
     return (
         <div>
             <div className="h-75 ">
-                <ResponsiveContainer width="100%" height="100%">
+                <ResponsiveContainer width="100%" height={300}>
                     <LineChart data={chartData}>
                         <XAxis dataKey="month" />
                         <YAxis />

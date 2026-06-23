@@ -1,9 +1,8 @@
 import { X } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { supabase } from "../../supabase/client";
 
 function AddExpenseModal({ onClose, getExpenses, expense }) {
-
   const [formData, setFormData] = useState(expense || {
     title: "",
     amount: "",
@@ -18,9 +17,20 @@ function AddExpenseModal({ onClose, getExpenses, expense }) {
     });
 
   }
-  // console.log(expense);
+
+
   async function handleSubmit(e) {
     e.preventDefault();
+
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    if (!user) {
+      console.log("No user found");
+      return;
+    }
+
     if (expense?.id) {
       await supabase
         .from("expense")
@@ -31,9 +41,8 @@ function AddExpenseModal({ onClose, getExpenses, expense }) {
           created_at: formData.date,
           note: formData.note,
         })
-        .eq("id", expense.id)
+        .eq("id", expense.id);
     } else {
-
       await supabase
         .from("expense")
         .insert({
@@ -42,12 +51,13 @@ function AddExpenseModal({ onClose, getExpenses, expense }) {
           category: formData.category,
           created_at: formData.date,
           note: formData.note,
-        })
+          user_id: user.id,
+        });
     }
+
     await getExpenses();
     onClose();
   }
-
 
   return (
     <div

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import {
     Pencil,
     Trash,
@@ -9,7 +9,10 @@ import {
     HeartPulse,
     Wallet,
 } from "lucide-react";
-function Transaction({ id, title, amount, category, onDelete, onEdit , expense }) {
+
+function Transaction({ id, title, amount, category, onDelete, onEdit, expense }) {
+
+
     const categoryConfig = {
         Entertainment: {
             icon: Tv,

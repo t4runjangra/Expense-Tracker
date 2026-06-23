@@ -1,15 +1,17 @@
 import ".././index.css"
-import { CreditCard, SquareChartGanttIcon, ChartNoAxesColumnIcon, Settings, Banknote, Moon, Sun } from 'lucide-react'
+import { CreditCard, BarChart3, ChartBar, Settings, Banknote, Moon, Sun } from 'lucide-react'
 import useTheme from '../context/Theme';
 import { useState } from "react"
-
+import { useNavigate } from 'react-router-dom';
+import { supabase } from "../supabase/client";
 function Sidebar() {
     const { themeMode, lightTheme, darkTheme } = useTheme();
+    const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState("Overview");
     const menuItems = [
-        { name: "Overview", icon: SquareChartGanttIcon },
+        { name: "Overview", icon: BarChart3 },
         { name: "Expense", icon: Banknote },
-        { name: "Analytics", icon: ChartNoAxesColumnIcon },
+        { name: "Analytics", icon: ChartBar },
         { name: "Settings", icon: Settings },
     ];
     function handleClick() {
@@ -19,6 +21,11 @@ function Sidebar() {
             lightTheme();
         }
     }
+    async function handleLogout() {
+        await supabase.auth.signOut();
+        navigate("/");
+    }
+
     return (
         <>
             <div className="bg-background border-r border-border border-gray-400/30 h-screen w-64 flex flex-col">
@@ -65,7 +72,6 @@ function Sidebar() {
                         <div className="flex h-8 w-8 items-center justify-center rounded-full bg-violet-600 font-semibold text-white text-sm">
                             T
                         </div>
-
                         <div>
                             <p className="font-bold">Tarun</p>
                             <p className="text-xs text-zinc-400">
@@ -73,6 +79,13 @@ function Sidebar() {
                             </p>
                         </div>
                     </div>
+
+                    <button
+                        onClick={handleLogout}
+                        className="rounded-lg bg-red-500 px-4 py-2 text-white w-full mt-4"
+                    >
+                        Logout
+                    </button>
                 </div>
             </div>
         </>
