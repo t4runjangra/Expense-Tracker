@@ -26,13 +26,7 @@ export default function Navbar() {
             </Link>
 
             <div className="hidden items-center gap-4 sm:flex">
-                <button
-                    onClick={handleClick}
-                    className=" px-4  rounded-full hover:bg-zinc-800/20 transition text-gray-800/20- "
-                >
-                    {themeMode === "dark" ? <Sun size={18} /> : <Moon size={18} />}
 
-                </button>
 
                 <Link
                     to="/login"

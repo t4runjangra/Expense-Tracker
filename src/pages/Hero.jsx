@@ -77,8 +77,8 @@ export default function Hero() {
             </div>
           </div>
 
-          <div className="relative isolated overflow-hidden rounded-[2rem] bg-gradient-to-br from-violet-800 via-slate-900 to-slate-950 px-6 py-8 shadow-2xl shadow-slate-900/30 sm:px-8 sm:py-10">
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(139,92,246,0.25),_transparent_45%)]" />
+          <div className="relative isolated overflow-hidden rounded-4xl bg-linear-to-br from-violet-800 via-slate-900 to-slate-950 px-6 py-8 shadow-2xl shadow-slate-900/30 sm:px-8 sm:py-10">
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(139,92,246,0.25),transparent_45%)]" />
             <div className="relative space-y-8">
               <div className="flex items-center justify-between rounded-3xl border border-white/10 bg-white/5 px-5 py-4 text-white shadow-lg shadow-slate-950/10">
                 <div>
@@ -93,7 +93,7 @@ export default function Hero() {
                   <span>Spending</span>
                   <span className="font-semibold text-white">$3,240</span>
                 </div>
-                <div className="mt-5 h-48 rounded-[1.5rem] bg-[radial-gradient(circle_at_top_left,_rgba(192,132,252,0.32),transparent_30%),linear-gradient(180deg,rgba(255,255,255,0.06),rgba(255,255,255,0))]">
+                <div className="mt-5 h-48 rounded-3xl bg-[radial-gradient(circle_at_top_left,rgba(192,132,252,0.32),transparent_30%),linear-gradient(180deg,rgba(255,255,255,0.06),rgba(255,255,255,0))]">
                   <div className="h-full w-full bg-[linear-gradient(90deg,transparent_20%,rgba(129,140,248,0.18),transparent_40%)]" />
                 </div>
                 <div className="mt-5 grid grid-cols-2 gap-4 text-sm text-slate-300">

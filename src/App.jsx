@@ -5,7 +5,7 @@ import { ThemeProvider } from './context/Theme';
 import Dashboard from './components/Dashboard/Dashboard.jsx';
 
 function App() {
-  const [themeMode, setThemeMode] = useState('light');
+  const [themeMode, setThemeMode] = useState('dark');
 
   function darkTheme() {
     setThemeMode('dark');

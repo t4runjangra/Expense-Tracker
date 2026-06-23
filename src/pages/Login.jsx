@@ -40,7 +40,7 @@ function Login() {
     <div className="min-h-screen bg-slate-50 px-6 py-10 text-slate-900 dark:bg-slate-950 dark:text-slate-100 sm:px-8">
       <Navbar />
       <div className="mx-auto flex max-w-6xl flex-col gap-10 lg:flex-row lg:items-center lg:justify-between">
-        <div className="max-w-xl rounded-[2rem] border border-slate-200 bg-white/90 p-10 shadow-2xl shadow-slate-900/10 backdrop-blur dark:border-slate-800 dark:bg-slate-900/90">
+        <div className="max-w-xl rounded-4xl border border-slate-200 bg-white/90 p-10 shadow-2xl shadow-slate-900/10 backdrop-blur dark:border-slate-800 dark:bg-slate-900/90">
           <div className="mb-8 space-y-4">
             <p className="inline-flex items-center gap-2 rounded-full bg-violet-100 px-4 py-2 text-sm font-semibold text-violet-700 dark:bg-violet-900/30 dark:text-violet-200">
               <ShieldCheck className="h-4 w-4" />
@@ -124,12 +124,12 @@ function Login() {
           </p>
         </div>
 
-        <div className="space-y-6 rounded-[2rem] bg-gradient-to-br from-violet-700 via-purple-800 to-slate-950 p-8 text-white shadow-2xl shadow-violet-500/20 sm:p-10 lg:max-w-xl">
+        <div className="space-y-6 rounded-4xl bg-linear-to-br from-violet-700 via-purple-800 to-slate-950 p-8 text-white shadow-2xl shadow-violet-500/20 sm:p-10 lg:max-w-xl">
           <div className="rounded-3xl border border-white/10 bg-white/5 p-4">
             <p className="text-xs uppercase tracking-[0.24em] text-violet-200/90">Expense intelligence</p>
             <p className="mt-3 text-3xl font-semibold">Secure access with elegant controls</p>
           </div>
-          <div className="grid gap-4 rounded-[2rem] border border-white/10 bg-white/5 p-6">
+          <div className="grid gap-4 rounded-4xl border border-white/10 bg-white/5 p-6">
             <div className="flex items-center gap-3">
               <div className="flex h-11 w-11 items-center justify-center rounded-3xl bg-white/12">
                 <ShieldCheck className="h-5 w-5 text-white" />
